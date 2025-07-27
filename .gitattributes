@@ -1,0 +1,8 @@
+*.txt text
+*.md text
+*.java text charset=utf-8
+*.py text charset=utf-8
+*.cpp text charset=utf-8
+*.h text charset=utf-8
+# и другие расширения, если нужно
+* text=auto !eol

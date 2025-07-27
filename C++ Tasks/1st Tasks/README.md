@@ -1,10 +1,10 @@
 ## 1A
 <img width="739" height="782" alt="image" src="https://github.com/user-attachments/assets/b05319f0-e306-49fa-8435-7e10918f3f58" />  
 
-## 2A
+## 1B
 <img width="716" height="807" alt="image" src="https://github.com/user-attachments/assets/85595a8e-9708-4bfc-9f27-24bb9834a06b" />  
 
-## 3A
+## 1C
 <img width="739" height="650" alt="image" src="https://github.com/user-attachments/assets/7e6751eb-c913-4ac2-b355-71d201526256" />  
 
 Ввод:  
@@ -44,6 +44,6 @@
 4  
 4  
 
-## 4A  
+## 1D  
 <img width="757" height="569" alt="image" src="https://github.com/user-attachments/assets/39c9856d-2112-4cbe-bafe-ee6ccd09f035" />
 

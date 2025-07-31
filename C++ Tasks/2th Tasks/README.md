@@ -1,49 +1,17 @@
-## 1A
-<img width="739" height="782" alt="image" src="https://github.com/user-attachments/assets/b05319f0-e306-49fa-8435-7e10918f3f58" />  
+## 2A  
+<img width="610" height="755" alt="image" src="https://github.com/user-attachments/assets/7ba90068-b237-45e9-a573-f1b53f6ba80f" />  
 
-## 1B
-<img width="716" height="807" alt="image" src="https://github.com/user-attachments/assets/85595a8e-9708-4bfc-9f27-24bb9834a06b" />  
+## 2B  
+<img width="602" height="658" alt="image" src="https://github.com/user-attachments/assets/b9aff4fd-c6ee-4c45-bc31-ec09cfd18111" />  
 
-## 1C
-<img width="739" height="650" alt="image" src="https://github.com/user-attachments/assets/7e6751eb-c913-4ac2-b355-71d201526256" />  
+## 2C  
+<img width="600" height="592" alt="image" src="https://github.com/user-attachments/assets/3df9bd81-7fde-4c93-915d-2788c0fc540b" />  
 
-Ввод:  
-4 3 5  
-1 2 3 4 5  
-1 1 1 1 1  
-0 99999 99999 99999 99999  
-0 0 0 0 99999  
-5 4 3 2 1  
-99999 99999 99999 0 0  
-99999 99999 0 0 0  
-12  
-1 1  
-1 2  
-1 3  
-2 1  
-2 2  
-2 3  
-3 1  
-3 2  
-3 3  
-4 1  
-4 2  
-4 3  
+## 2D  
+<img width="593" height="824" alt="image" src="https://github.com/user-attachments/assets/4649261f-3f95-472f-906a-b4e1339ae6ac" />  
 
-Вывод:   
-3  
-4  
-3  
-5  
-4  
-3  
-1  
-4  
-3  
-4  
-4  
-4  
+## 2E
+<img width="621" height="770" alt="image" src="https://github.com/user-attachments/assets/8f69ce18-5e98-4eaa-ab2d-2d21c5c2a61b" />
 
-## 1D  
-<img width="757" height="569" alt="image" src="https://github.com/user-attachments/assets/39c9856d-2112-4cbe-bafe-ee6ccd09f035" />
+
 

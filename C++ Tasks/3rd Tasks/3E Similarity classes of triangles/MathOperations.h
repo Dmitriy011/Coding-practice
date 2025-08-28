@@ -2,5 +2,5 @@
 
 #include <iostream>
 
-size_t gcd(size_t a, size_t b);
+size_t GCD(size_t A, size_t B);
 

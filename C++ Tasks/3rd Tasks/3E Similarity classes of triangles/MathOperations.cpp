@@ -3,13 +3,13 @@
 #include "MathOperations.h"
 
 
-size_t gcd(size_t a, size_t b)
+size_t GCD(size_t A, size_t B)
 {
-    while (b)
+    while (B)
     {
-        a %= b;
-        std::swap(a, b);
+        A %= B;
+        std::swap(A, B);
     }
 
-    return a;
+    return A;
 }

@@ -2,13 +2,14 @@
 
 #include <iostream>
 
+//* A, B, C - длины сторон треугольника
 
-class Triangle_side
+class Triangle
 {
 public:
-    size_t a, b, c;
+    size_t A, B, C;
 
-    Triangle_side(size_t sideA, size_t sideB, size_t sideC) : a(sideA), b(sideB), c(sideC) {}
+    Triangle(size_t _A, size_t B, size_t C) : A(_A), B(B), C(C) {}
 
-    bool operator == (const Triangle_side& rhs) const { return (a == rhs.a && b == rhs.b && c == rhs.c); }
+    bool operator == (const Triangle& rhs) const { return (A == rhs.A && B == rhs.B && C == rhs.C); }
 };

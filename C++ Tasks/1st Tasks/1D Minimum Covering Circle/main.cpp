@@ -50,9 +50,9 @@ bool isContained_kPoints(const std::vector<StructPoint>& points, size_t k, doubl
     // Подсчёт "накрытых" точек при проходе
     // "Двигаем" центр окружности вдоль оси Ox.
     size_t counter = 0;                                                         // Сколько интервалов сейчас накрывают текущ позицию центра 
-    for (size_t No_point = 0; No_point < x_isInside.size(); ++No_point)         // (т.е. сколько открыто)
+    for (size_t i_point = 0; i_point < x_isInside.size(); ++i_point)         // (т.е. сколько открыто)
     {
-        if (x_isInside[No_point].second == true)
+        if (x_isInside[i_point].second == true)
             counter--;
         else
             counter++;
@@ -88,7 +88,6 @@ double find_smallestRadiusCircle(const std::vector<StructPoint>& points, size_t 
 
 int main()
 {
-
     // -- Считывание задачи --//
     size_t n;
     size_t k;

@@ -1,7 +1,7 @@
 ﻿#include <iostream>
 #include <vector>
 
-// На данном индексе последовательность возрастает или убывает.
+//* На данном индексе последовательность возрастает или убывает.
 bool Check_typeInterval(const std::vector<int>& _sequence, int _indexCurEl)
 {
     if (_indexCurEl == static_cast<int>(_sequence.size()) - 1)
@@ -14,10 +14,12 @@ int main()
 {
     int n;
     int el;
-
     std::vector<int> arr;
 
-    // -- Считывание чисел --//
+// ========= 1. Считывание задачи ========= //
+
+//* Если подряд идут одинаковые числа, то в arr добавляется только одно из них
+//* Т.к. переход 5 → 5 не меняет знак, и такие элементы не участвуют в чередовании)
     std::cin >> n;
     std::cin >> el;
 
@@ -25,18 +27,23 @@ int main()
     for (int i = 1; i < n; ++i)
     {
         std::cin >> el;
-
-        if (el != arr[static_cast<int>(arr.size()) - 1])         // Если подряд идут одинаковые числа, то в arr добавляется только одно из них.
-            arr.push_back(el);                                   // (т.к. переход 5 → 5 не меняет знак, и такие элементы не участвуют в чередовании)
+        if (el != arr[static_cast<int>(arr.size()) - 1])
+            arr.push_back(el);
     }
 
-    // -- Решение задачи --//
-    std::vector<bool> subsequence(arr.size(), false);           // Булевый массив: true, если эл-т вкл в рез-щую подпоследовательность.
+// ========= 2. Решение задачи ========= //
+
+//* subsequence: Булевый массив: true, если эл-т вкл в рез-щую подпослед.
+//* curIndexes: Текущ "цепочка", которую пытаемся построить.
+//* sign: Текущ знак разности между соседними эл-ми: +1возрастает, -1 убывает
+//* interval_indexes: Индексы, с которых начин "новые участки" подпоследоват.
+
+    std::vector<bool> subsequence(arr.size(), false);
     subsequence[0] = true;
-    std::vector<int> curIndexes;                                // Текущ "цепочка", которую пытаемся построить.
+    std::vector<int> curIndexes; 
     curIndexes = { 0 };
 
-    int16_t sign = 0;                                           // Текущ знак разности между соседними элементами: +1 — возрастает, -1 — убывает
+    int16_t sign = 0;
 
     if (arr.size() > 1)
     {
@@ -45,29 +52,51 @@ int main()
         curIndexes.push_back(1);
     }
 
-    std::vector<int> interval_indexes;                          // Индексы, с которых начинаются "новые участки" подпоследовательности.
+    std::vector<int> interval_indexes;
     interval_indexes.push_back(0);
 
-    for (size_t index = 2; index < arr.size(); ++index)
+// ================== //
+
+//* Если направление (sign) сохр, добавляем в curIndexes.
+//* Иначе (если направление меняется): значит, происходит чередование — фикс конец предыдущ интервала (i - 1), начинаем новый:
+//**** subsequence[i - 1] = true; Отмечаем послед эл предыдущ волны, как часть итог подпоследоват.
+//**** interval_indexes.push_back(i); Сохр, с какого места начнётся следующ волна
+//**** curIndexes = {}; Сброс текущ набора curIndexes и начин новая волна с эл-та i
+
+    for (size_t i = 2; i < arr.size(); ++i)
     {
         if (curIndexes.size() == 1)
-            sign = arr[index] > arr[index - 1] ? 1 : -1;
+            sign = arr[i] > arr[i - 1] ? 1 : -1;
 
-        if ((arr[index] - arr[index - 1]) * sign > 0)       // Если направление (sign) сохраняется, добавляем в curIndexes.
-            curIndexes.push_back(index);
-        else                                                // Если направление меняется, значит, происходит чередование — фикс конец предыдущ интервала (index - 1), начинаем новый.
+        if ((arr[i] - arr[i - 1]) * sign > 0)
+            curIndexes.push_back(i);
+        else 
         {
-            subsequence[index - 1] = true;                  // Отмечаем последний элемент предыдущ волны, как часть итоговой подпоследоват.
-            interval_indexes.push_back(index);              // Сохр, с какого места начнётся следующая волна
+            subsequence[i - 1] = true;
+            interval_indexes.push_back(i);
 
-            curIndexes = {};                                // Сброс текущего набора curIndexes и наичнается новая волна с эл-та index
-            curIndexes.push_back(index);
+            curIndexes = {};
+            curIndexes.push_back(i);
         }
     }
 
-    // -- Определение, какие индексы сохранить в результате (Обработка краев и случаев с короткими последовательностями)  --//
     std::vector<int> resIndexes_subsequence{};
-    if (interval_indexes.size() == 1)                       // Вся последовательность без чередований -> Выводятся первые 1–2 элемента.
+
+// ================== //
+
+//* Если вся последовательность без чередований -> Выводятся первые 1–2 элемента.
+//* Иначе если (Есть несколько интервалов)
+//**** 1) subsequence[static_cast<int>(arr.size()) - 1] = true; Добавляем последний элемент (обработаем позже)
+//**** 2) Если 2 соседн интервала имеют одинак тип изм — вкл эл, чтобы сохр макс длину (нужно "спасти" хотя бы один эл)
+//**** 3) Формирование финального списка индексов
+//**** 4) Корректировка на краях интерваловов 
+//**** 5) tmp_intervId = 0; Номер текущ интервала в interval_indexes, с которым связан текущий i
+//**** 6) Не вкл ли "ошибочный" эл, стоящий на гр, и корр (Если эл в resIndexes_subsequence не совп с тем, что стоит на границе интерв → он мог быть доб автоматич, и его нужно перепровер)
+//**** 7) int R = resIndexes_subsequence[i];  индекс текущ "подозрительного" эл
+//**** 8) sign направление движения от предыдущ эл
+//**** 9) Поиск влево, пока текущ эл остаётся "больше" предыдущ и следующ соседа (в случае макс.)
+
+    if (interval_indexes.size() == 1)
     {
         resIndexes_subsequence.push_back(0);
 
@@ -77,67 +106,60 @@ int main()
             resIndexes_subsequence.push_back(1);
         }
     }
-    else if (interval_indexes.size() > 1)                  // Есть несколько интервалов
+    else if (interval_indexes.size() > 1)
     {
-        // Добавляем последний элемент (обработаем позже) 
+        // 1)
         subsequence[static_cast<int>(arr.size()) - 1] = true;
 
-        for (size_t index = 1; index < interval_indexes.size(); ++index)
+        for (size_t i = 1; i < interval_indexes.size(); ++i)
         {
-            // Если два соседних интервала имеют одинаковый тип изменения — включаем элемент, чтобы сохранить макс длину (нужно "спасти" хотя бы один элемент,)
-            if (Check_typeInterval(arr, interval_indexes[index]) ==
-                Check_typeInterval(arr, interval_indexes[index - 1]))
-            {
-                subsequence[interval_indexes[index]] = true;
-            }
+        // 2) 
+            if (Check_typeInterval(arr, interval_indexes[i]) == Check_typeInterval(arr, interval_indexes[i - 1]))
+                subsequence[interval_indexes[i]] = true;
         }
 
-        // -- Формирование финального списка индексов  --// 
-        for (size_t index = 0; index < subsequence.size(); ++index)
+        // 3)
+        for (size_t i = 0; i < subsequence.size(); ++i)
         {
-            if (subsequence[index] == true)
-                resIndexes_subsequence.push_back(index);
+            if (subsequence[i] == true)
+                resIndexes_subsequence.push_back(i);
         }
 
-        // -- Корректировка на краях интерваловов  --//  
-        int tmp_intervId = 0;                                                                                       // Номер текущего интервала в interval_indexes, с которым связан текущий index
-        for (size_t index = 1; index < resIndexes_subsequence.size(); ++index)
+        // 4) 
+        // 5) 
+        int tmp_intervId = 0;
+        for (size_t i = 1; i < resIndexes_subsequence.size(); ++i)
         {
-            // Не вкл ли "ошибочный" элемент, стоящий на границе, и корректировка 
-            // (Если элемент в resIndexes_subsequence не совпадает с тем, что стоит на границе интервала → он мог быть добавлен автоматически, и его нужно перепроверить)
-            if (resIndexes_subsequence[index] != interval_indexes[tmp_intervId])
+        // 6) 
+            if (resIndexes_subsequence[i] != interval_indexes[tmp_intervId])
             {
-                int R = resIndexes_subsequence[index];                                                              //  индекс текущего "подозрительного" элемента
+        // 7) 
+                int R = resIndexes_subsequence[i];
 
-                sign = arr[resIndexes_subsequence[index]] - arr[resIndexes_subsequence[index - 1]] > 0 ? 1 : -1;   // направление движения от предыдущего элемента
+        // 8)
+                sign = arr[resIndexes_subsequence[i]] - arr[resIndexes_subsequence[i - 1]] > 0 ? 1 : -1;
 
-                if (index < static_cast<size_t>(resIndexes_subsequence.size() - 1))
+                if (i < static_cast<size_t>(resIndexes_subsequence.size() - 1))
                 {
-                    auto index_prev = resIndexes_subsequence[index - 1];
-                    auto index_next = resIndexes_subsequence[index + 1];
-                    // Поиск влево,  пока текущий элемент остаётся "больше" предыдущего и следующего соседа (в случае макс.)
-                    while ((arr[R] - arr[index_prev]) * sign > 0 &&
-                        (arr[R] - arr[index_next]) * sign > 0 &&
-                        R >= interval_indexes[tmp_intervId])
-                    {
+                    auto i_prev = resIndexes_subsequence[i - 1];
+                    auto i_next = resIndexes_subsequence[i + 1];
+        // 9)
+                    while ((arr[R] - arr[i_prev]) * sign > 0 && (arr[R] - arr[i_next]) * sign > 0 && R >= interval_indexes[tmp_intervId])
                         R--;
-                    }
                 }
                 else
                 {
-                    while ((arr[R] - arr[resIndexes_subsequence[index - 1]]) * sign > 0 &&
-                        R >= interval_indexes[tmp_intervId])
-                    {
+                    while ((arr[R] - arr[resIndexes_subsequence[i - 1]]) * sign > 0 && R >= interval_indexes[tmp_intervId])
                         R--;
-                    }
                 }
 
-                resIndexes_subsequence[index] = R + 1;
+                resIndexes_subsequence[i] = R + 1;
                 tmp_intervId++;
             }
         }
     }
 
+// ========= 3. Вывод ответа ========= //
     for (size_t i = 0; i < resIndexes_subsequence.size(); ++i)
         std::cout << arr[resIndexes_subsequence[i]] << " ";
 

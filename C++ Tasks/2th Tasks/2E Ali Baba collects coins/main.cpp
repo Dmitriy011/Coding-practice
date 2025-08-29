@@ -3,7 +3,8 @@
 #include <cmath>
 #include <vector>
 
-// n - количество монет
+
+//* n - количество монет
 
 struct Coin
 {
@@ -37,35 +38,35 @@ int main()
 
 // -- Решение задачи --// 
     std::sort(coins.begin(), coins.end());                                                  // Сортирует монеты по позиции (и времени, если позиции совпадают)
-    std::vector<std::vector<Coin>> dp(n, std::vector<Coin>(n));                             // Хранит минимальные накопленные значения pos и time при сборе всех монет от i до j
+    std::vector<std::vector<Coin>> DP(n, std::vector<Coin>(n));                             // Хранит минимальные накопленные значения pos и time при сборе всех монет от i до j
     for (size_t h_step = 1; h_step < n; ++h_step)
     {
         for (size_t index = 0; index < n - h_step; ++index)
         {
-            dp[index][index + h_step] = { inf, inf };                                           // Перебирает все подпоследовательности [index, index + h_step], дл от 2 до n, инициализируя их как «невозможные»
+            DP[index][index + h_step] = { inf, inf };                                           // Перебирает все подпоследовательности [index, index + h_step], дл от 2 до n, инициализируя их как «невозможные»
 
             int32_t tmp1_coordCoin = std::abs(std::next(coins.begin(), index)->pos -            // Вариант 1) идём от правой части к левой
                 std::next(coins.begin(), index + 1)->pos);
             int32_t tmp1_time = std::abs(std::next(coins.begin(), index)->pos -
                 std::next(coins.begin(), index + h_step)->pos);
             Coin tmp1_coin = { tmp1_coordCoin, tmp1_time };                                     // tmp1_coin — сколько нужно пройти и сколько времени пройдёт, если идти от позиции index влево.
-            Coin distances = dp[index + 1][index + h_step] + tmp1_coin;                         // Складываем с уже посчитанным путём dp[index + 1][index + h_step].
+            Coin distances = DP[index + 1][index + h_step] + tmp1_coin;                         // Складываем с уже посчитанным путём dp[index + 1][index + h_step].
 
             if (distances.pos <= coins[index].time || distances.time <= coins[index].time)      // Если мы успеваем к монете index — обновляем dp.
-                dp[index][index + h_step].pos = std::min(distances.pos, distances.time);
+                DP[index][index + h_step].pos = std::min(distances.pos, distances.time);
 
             int32_t tmp2_coordCoin = std::abs(std::next(coins.begin(), index)->pos -                    // Вариант 2) идём от левой части к правой
                 std::next(coins.begin(), index + h_step)->pos);
             int32_t tmp2_time = std::abs(std::next(coins.begin(), index + h_step - 1)->pos -
                 std::next(coins.begin(), index + h_step)->pos);
             Coin tmp2_coin = { tmp2_coordCoin, tmp2_time };
-            Coin times = dp[index][index + h_step - 1] + tmp2_coin;
+            Coin times = DP[index][index + h_step - 1] + tmp2_coin;
 
             if (times.pos <= coins[index + h_step].time || times.time <= coins[index + h_step].time)    // Проверяем, успеваем ли к coins[index + h_step].
-                dp[index][index + h_step].time = std::min(times.pos, times.time);
+                DP[index][index + h_step].time = std::min(times.pos, times.time);
         }
     }
-    int32_t ans = std::min(dp.front().back().pos, dp.front().back().time);                     // Из dp[0][n - 1] берётся лучший результат, где мы собрали все монеты (независимо, с какой стороны начали)
+    int32_t ans = std::min(DP.front().back().pos, DP.front().back().time);                     // Из dp[0][n - 1] берётся лучший результат, где мы собрали все монеты (независимо, с какой стороны начали)
 
 
 // -- Вывод решения --// 

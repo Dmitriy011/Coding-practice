@@ -54,22 +54,12 @@ std::vector<unsigned>::iterator find_pivot(std::vector<unsigned>::iterator L, st
         return R;
 
     return L;
-
-   /* unsigned a = *L;
-    unsigned b = *mid;
-    unsigned c = *(R - 1);
-    if ((a <= b && b <= c) || (c <= b && b <= a)) return mid;
-    if ((b <= a && a <= c) || (c <= a && a <= b)) return L;
-    return R - 1;
-    */
 }
 
 // Делит массив вокруг pivot:
 // Все элементы < pivot_value — слева
 // Все ≥ pivot_value — справа
-std::vector<unsigned>::iterator partition(std::vector<unsigned>::iterator L,
-    std::vector<unsigned>::iterator R,
-    std::vector<unsigned>::iterator pivot)
+std::vector<unsigned>::iterator partition(std::vector<unsigned>::iterator L, std::vector<unsigned>::iterator R,std::vector<unsigned>::iterator pivot)
 {
     unsigned pivot_value = *pivot;                      // Сохр знач опорного эл-а
     std::vector<unsigned>::iterator tmp_begin = L;      // tmp_begin — исх начало массива

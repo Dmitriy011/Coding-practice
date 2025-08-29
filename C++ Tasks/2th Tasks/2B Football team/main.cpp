@@ -20,9 +20,7 @@ bool CompareIndexPlayer(const Player& fitst_player, const Player& second_player)
     return fitst_player.index < second_player.index;
 }
 
-void QuickSort(std::vector<Player>::iterator L,
-    std::vector<Player>::iterator R,
-    bool (*compare_player_is2st_more) (const Player&, const Player&))
+void QuickSort(std::vector<Player>::iterator L, std::vector<Player>::iterator R, bool (*compare_player_is2st_more) (const Player&, const Player&))
 {
     // Если отрезок пустой (L == R) или из одного эл (L + 1 == R), сорт не нужно
     if ((L == R) || (L + 1 == R))
@@ -83,9 +81,7 @@ int64_t FindTeamRes(const std::vector <Player>& players, std::vector <Player>* t
     {
         // Берем сумму двух самых слабых игроков из окна
         // ** (если след игрок (R_index_player) сильнее этой суммы, он "портит" сплочённость, убираем кого-то из начала окна) **
-        int64_t max_possible_efficiency =
-            static_cast<int64_t>(players_vec[L_worst_player_index].effectiveness) +
-            static_cast<int64_t>(players_vec[L_worst_player_index + 1].effectiveness);
+        int64_t max_possible_efficiency = static_cast<int64_t>(players_vec[L_worst_player_index].effectiveness) + static_cast<int64_t>(players_vec[L_worst_player_index + 1].effectiveness);
         
         //  Если можно вкл игрока: доб в команду
         if (players_vec[R_index_player].effectiveness <= max_possible_efficiency)
@@ -108,9 +104,7 @@ int64_t FindTeamRes(const std::vector <Player>& players, std::vector <Player>* t
                 // Очищаем team_res (массив результата).
                 team_res->clear();
                 // Копир игроков из найденного окна [first_player_index, last_player_index] в team_res.
-                for (int i_player = st_player_index;
-                    i_player <= fn_player_index;
-                    ++i_player)
+                for (int i_player = st_player_index;  i_player <= fn_player_index; ++i_player)
                 {
                     team_res->push_back(players_vec[i_player]);
                 }
@@ -157,7 +151,6 @@ int main()
         efficiencyPlayers[i].index = i;
     }
 
-    
 // -- Решение задачи --// 
     std::cout << FindTeamRes(efficiencyPlayers, &team_res) << "\n";
 

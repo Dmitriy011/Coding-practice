@@ -4,47 +4,15 @@
 #include <utility>
 #include <functional>
 
+#include "PriorityQueue.h"
+
+
 // n- количество массивов
 // m - длиан последовательности
 
 //Ограничения:
 // 1)Время: O(mn log n) — типичная сложность для k - way merge с использованием кучи.
 // 2) Память: O(mn) — можно хранить все элементы (это и есть входные данные), но работать эффективно.
-
-// T — тип элементов (в нашем случае: std::pair<int, size_t>).
-// Compare — функция сравнения (например, std::greater для min-heap).
-
-// std::push_heap НЕ делает весь вектор отсортированным.
-// Он делает так, чтобы вектор соответствовал свойству кучи(heap property), то есть :
-// В случае min - heap(std::greater) : elements[0] — наименьший элемент.
-// Остальные элементы расположены не обязательно по убыванию, а лишь так, чтобы можно было эффективно извлечь минимум за O(log n)
-template <typename T, class Compare>
-class PriorityQueue
-{
-public:
-    // Возвращает наименьший элемент (всегда хрнатися в elements.front())
-    const T& top() const { return elements.front(); }
-
-    void push(const T& obj)
-    {
-        elements.emplace_back(std::move(obj));                          // 1) Добавляем элемент в конец вектора
-        std::push_heap(elements.begin(), elements.end(), orderCompare); // 2) Перестраиваем вектор так, чтобы он стал кучей по правилу orderCompare
-    }                                                                   // "Просеивает вверх" последний элемент, чтобы восстановить правильный порядок.
-
-    // Удаляет наименьший элемент:
-    void pop()
-    {
-        std::pop_heap(elements.begin(), elements.end(), orderCompare);  // 1) перемещает его в конец,
-        elements.pop_back();                                            // 2) удаляет.
-    }
-
-    // Пуст ли контейнер.
-    bool isEmpty() const { return elements.empty(); }
-
-private:
-    std::vector<T> elements{};      // Внутренний вектор (реализация кучи).
-    Compare orderCompare{};         // Объект сравнения (например, std::greater).
-};
 
 // Проверяет, остались ли ещё элементы в данной последовательности: true, если есть что читать.
 bool isProcessedCurArr(const size_t countProcessed_inArray, const size_t m_sizeArr)

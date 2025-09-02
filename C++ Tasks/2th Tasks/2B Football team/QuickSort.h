@@ -1,5 +1,7 @@
 ﻿#pragma once
 
+#include <vector>
+
 void QuickSort(std::vector<Player>::iterator L, std::vector<Player>::iterator R, bool (*compare_player_is2st_more) (const Player&, const Player&))
 {
 //**** 1) Если отрезок пустой (L == R) или из одного эл (L + 1 == R), сорт не нужно
